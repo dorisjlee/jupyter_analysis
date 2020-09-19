@@ -1,0 +1,175 @@
+name,cell,line,category,text
+nb_299986,1.0,1,other,import numpy as np
+nb_299986,1.0,2,other,import matplotlib.pyplot as plt
+nb_299986,1.0,3,other,% matplotlib inline
+nb_299986,1.0,4,other,"plt.rcParams[""figure.dpi""] = 300"
+nb_299986,1.0,5,other,"np.set_printoptions(precision=3, suppress=True)"
+nb_299986,1.0,6,other,import pandas as pd
+nb_299986,1.0,7,postprocessing,"from sklearn.model_selection import train_test_split, cross_val_score"
+nb_299986,1.0,8,other,from sklearn.pipeline import make_pipeline
+nb_299986,1.0,9,preprocessing,"from sklearn.preprocessing import scale, StandardScaler"
+nb_299986,2.0,1,model,from sklearn.neural_network import MLPClassifier
+nb_299986,2.0,2,other,from sklearn.datasets import make_moons
+nb_299986,2.0,4,other,"X, y = make_moons(n_samples=100, noise=0.25, random_state=2)"
+nb_299986,2.0,6,other,"X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y,"
+nb_299986,2.0,7,other,                                                    random_state=42)
+nb_299986,2.0,9,other,"plt.scatter(X_train[:, 0], X_train[:, 1], c=plt.cm.Vega10(y_train))"
+nb_299986,2.0,10,other,xlim = plt.xlim()
+nb_299986,2.0,11,other,ylim = plt.ylim()
+nb_299986,3.0,1,other,"xs = np.linspace(xlim[0], xlim[1], 1000)"
+nb_299986,3.0,2,other,"ys = np.linspace(ylim[0], ylim[1], 1000)"
+nb_299986,3.0,3,other,"xx, yy = np.meshgrid(xs, ys)"
+nb_299986,3.0,4,other,"X_grid = np.c_[xx.ravel(), yy.ravel()]"
+nb_299986,4.0,1,other,"mlp = MLPClassifier(solver='lbfgs', random_state=0).fit(X_train, y_train)"
+nb_299986,4.0,2,print,"print(mlp.score(X_train, y_train))"
+nb_299986,4.0,3,print,"print(mlp.score(X_test, y_test))"
+nb_299986,5.0,1,print,"plt.contour(xx, yy, mlp.predict_proba(X_grid)[:, 1].reshape(xx.shape), levels=[.5])"
+nb_299986,5.0,2,other,"plt.scatter(X_train[:, 0], X_train[:, 1], c=plt.cm.Vega10(y_train))"
+nb_299986,5.0,4,other,plt.xlim(xlim)
+nb_299986,5.0,5,other,plt.ylim(ylim)
+nb_299986,6.0,1,other,"fig, axes = plt.subplots(3, 3, figsize=(8, 5))"
+nb_299986,6.0,2,other,"for ax, i in zip(axes.ravel(), range(10)):"
+nb_299986,6.0,3,other,"    mlp = MLPClassifier(solver='lbfgs', random_state=i).fit(X_train, y_train)"
+nb_299986,6.0,4,print,"    print(mlp.score(X_train, y_train))"
+nb_299986,6.0,5,print,"    print(mlp.score(X_test, y_test))"
+nb_299986,6.0,7,print,"    ax.contour(xx, yy, mlp.predict_proba(X_grid)[:, 1].reshape(xx.shape), levels=[.5])"
+nb_299986,6.0,8,other,"    ax.scatter(X_train[:, 0], X_train[:, 1], c=plt.cm.Vega10(y_train))"
+nb_299986,6.0,10,other,    ax.set_xlim(xlim)
+nb_299986,6.0,11,other,    ax.set_ylim(ylim)
+nb_299986,6.0,12,other,    ax.set_xticks(())
+nb_299986,6.0,13,other,    ax.set_yticks(())
+nb_299986,7.0,1,other,"mlp = MLPClassifier(solver='lbfgs', hidden_layer_sizes=(10, 10, 10), random_state=0)"
+nb_299986,7.0,2,other,"mlp.fit(X_train, y_train)"
+nb_299986,7.0,3,print,"print(mlp.score(X_train, y_train))"
+nb_299986,7.0,4,print,"print(mlp.score(X_test, y_test))"
+nb_299986,8.0,1,print,"plt.contour(xx, yy, mlp.predict_proba(X_grid)[:, 1].reshape(xx.shape), levels=[.5])"
+nb_299986,8.0,2,other,"plt.scatter(X_train[:, 0], X_train[:, 1], c=plt.cm.Vega10(y_train))"
+nb_299986,8.0,4,other,plt.xlim(xlim)
+nb_299986,8.0,5,other,plt.ylim(ylim)
+nb_299986,9.0,1,other,"mlp = MLPClassifier(solver='lbfgs', hidden_layer_sizes=(10, 10, 10), activation=""tanh"", random_state=0)"
+nb_299986,9.0,2,other,"mlp.fit(X_train, y_train)"
+nb_299986,9.0,3,print,"print(mlp.score(X_train, y_train))"
+nb_299986,9.0,4,print,"print(mlp.score(X_test, y_test))"
+nb_299986,10.0,1,print,"plt.contour(xx, yy, mlp.predict_proba(X_grid)[:, 1].reshape(xx.shape), levels=[.5])"
+nb_299986,10.0,2,other,"plt.scatter(X_train[:, 0], X_train[:, 1], c=plt.cm.Vega10(y_train))"
+nb_299986,10.0,4,other,plt.xlim(xlim)
+nb_299986,10.0,5,other,plt.ylim(ylim)
+nb_299986,11.0,1,other,rng = np.random.RandomState(0)
+nb_299986,11.0,2,group,x = np.sort(rng.uniform(size=100))
+nb_299986,11.0,3,other,"y = np.sin(10 * x) + 5 * x + np.random.normal(0, .3, size=100)"
+nb_299986,11.0,4,plot,"plt.plot(x, y, 'o')"
+nb_299986,12.0,1,other,"line = np.linspace(0, 1, 100)"
+nb_299986,12.0,2,print,"X = x.reshape(-1, 1)"
+nb_299986,13.0,1,model,from sklearn.neural_network import MLPRegressor
+nb_299986,13.0,2,other,"mlp_relu = MLPRegressor(solver=""lbfgs"").fit(X, y)"
+nb_299986,13.0,3,other,"mlp_tanh = MLPRegressor(solver=""lbfgs"", activation='tanh').fit(X, y)"
+nb_299986,14.0,1,plot,"plt.plot(x, y, 'o')"
+nb_299986,14.0,2,plot,"plt.plot(line, mlp_relu.predict(line.reshape(-1, 1)), label=""relu"")"
+nb_299986,14.0,3,plot,"plt.plot(line, mlp_tanh.predict(line.reshape(-1, 1)), label=""tanh"")"
+nb_299986,14.0,4,other,plt.legend()
+nb_299986,15.0,1,other,from sklearn.datasets import load_digits
+nb_299986,15.0,2,other,digits = load_digits()
+nb_299986,15.0,3,other,"X_train, X_test, y_train, y_test = train_test_split("
+nb_299986,15.0,4,other,"    digits.data / 16., digits.target, stratify=digits.target, random_state=0)"
+nb_299986,16.0,1,other,"mlp = MLPClassifier(max_iter=1000, random_state=0).fit(X_train, y_train)"
+nb_299986,16.0,2,print,"print(mlp.score(X_train, y_train))"
+nb_299986,16.0,3,print,"print(mlp.score(X_test, y_test))"
+nb_299986,17.0,1,other,from sklearn.datasets import load_breast_cancer
+nb_299986,17.0,2,other,data = load_breast_cancer()
+nb_299986,18.0,1,other,"X_train, X_test, y_train, y_test = train_test_split("
+nb_299986,18.0,2,other,"    data.data, data.target, stratify=data.target, random_state=0)"
+nb_299986,18.0,3,other,scaler = StandardScaler().fit(X_train)
+nb_299986,18.0,4,other,X_train_scaled = scaler.transform(X_train)
+nb_299986,18.0,5,other,X_test_scaled = scaler.transform(X_test)
+nb_299986,19.0,1,other,"mlp = MLPClassifier(max_iter=1000, random_state=0).fit(X_train_scaled, y_train)"
+nb_299986,19.0,2,print,"print(mlp.score(X_train_scaled, y_train))"
+nb_299986,19.0,3,print,"print(mlp.score(X_test_scaled, y_test))"
+nb_299986,20.0,1,other,"mlp = MLPClassifier(solver=""lbfgs"", random_state=1).fit(X_train_scaled, y_train)"
+nb_299986,20.0,2,print,"print(mlp.score(X_train_scaled, y_train))"
+nb_299986,20.0,3,print,"print(mlp.score(X_test_scaled, y_test))"
+nb_299986,21.0,1,postprocessing,from sklearn.model_selection import GridSearchCV
+nb_299986,21.0,2,other,"pipe = make_pipeline(StandardScaler(), MLPClassifier(solver=""lbfgs"", random_state=1))"
+nb_299986,21.0,3,other,"param_grid = {'mlpclassifier__alpha': np.logspace(-3, 3, 7)}"
+nb_299986,21.0,4,other,"grid = GridSearchCV(pipe, param_grid, cv=5)"
+nb_299986,22.0,1,other,"grid.fit(X_train, y_train)"
+nb_299986,23.0,1,create,results = pd.DataFrame(grid.cv_results_)
+nb_299986,23.0,2,group,"res = results.pivot_table(index=""param_mlpclassifier__alpha"","
+nb_299986,23.0,3,other,"                          values=[""mean_test_score"", ""mean_train_score""])"
+nb_299986,24.0,1,other,res
+nb_299986,25.0,1,plot,res.plot()
+nb_299986,25.0,2,other,"plt.xscale(""log"")"
+nb_299986,25.0,3,other,"plt.ylim(0.95, 1.01)"
+nb_299986,26.0,1,group,"res = results.pivot_table(index=""param_mlpclassifier__alpha"", values=[""mean_test_score"", ""mean_train_score"", ""std_test_score"", ""std_train_score""])"
+nb_299986,27.0,1,stats,res.mean_test_score.plot(yerr=res.std_test_score)
+nb_299986,27.0,2,stats,res.mean_train_score.plot(yerr=res.std_train_score)
+nb_299986,27.0,3,other,"plt.xscale(""log"")"
+nb_299986,27.0,4,other,"plt.ylim(0.95, 1.01)"
+nb_299986,27.0,5,other,plt.legend()
+nb_299986,28.0,1,postprocessing,from sklearn.model_selection import GridSearchCV
+nb_299986,28.0,2,other,"pipe = make_pipeline(StandardScaler(), MLPClassifier(solver=""lbfgs"", random_state=1))"
+nb_299986,28.0,3,other,param_grid = {'mlpclassifier__hidden_layer_sizes':
+nb_299986,28.0,4,other,"              [(10,), (50,), (100,), (500,), (10, 10), (50, 50), (100, 100), (500, 500)]"
+nb_299986,28.0,5,other,             }
+nb_299986,28.0,6,other,"grid = GridSearchCV(pipe, param_grid, cv=5)"
+nb_299986,29.0,1,other,"grid.fit(X_train, y_train)"
+nb_299986,30.0,1,create,results = pd.DataFrame(grid.cv_results_)
+nb_299986,30.0,2,group,"res = results.pivot_table(index=""param_mlpclassifier__hidden_layer_sizes"", values=[""mean_test_score"", ""mean_train_score"", ""std_test_score"", ""std_train_score""])"
+nb_299986,31.0,1,stats,res.mean_test_score.plot(yerr=res.std_test_score)
+nb_299986,31.0,2,stats,res.mean_train_score.plot(yerr=res.std_train_score)
+nb_299986,31.0,3,other,plt.legend()
+nb_299986,36.0,1,postprocessing,from sklearn.model_selection import RepeatedStratifiedKFold
+nb_299986,36.0,2,postprocessing,from sklearn.model_selection import GridSearchCV
+nb_299986,36.0,3,other,"pipe = make_pipeline(StandardScaler(), MLPClassifier(solver=""lbfgs"", random_state=1))"
+nb_299986,36.0,4,other,param_grid = {'mlpclassifier__hidden_layer_sizes':
+nb_299986,36.0,5,other,"              [(10,), (25,), (50,), (100,) , (10, 10), (25, 25), (50, 50)]"
+nb_299986,36.0,6,other,             }
+nb_299986,36.0,7,other,"grid = GridSearchCV(pipe, param_grid)"
+nb_299986,37.0,1,other,"grid.fit(X_train, y_train)"
+nb_299986,38.0,1,create,results = pd.DataFrame(grid.cv_results_)
+nb_299986,38.0,2,group,"res = results.pivot_table(index=""param_mlpclassifier__hidden_layer_sizes"", values=[""mean_test_score"", ""mean_train_score"", ""std_test_score"", ""std_train_score""])"
+nb_299986,39.0,1,stats,res.mean_test_score.plot(yerr=res.std_test_score)
+nb_299986,39.0,2,stats,res.mean_train_score.plot(yerr=res.std_train_score)
+nb_299986,39.0,3,other,plt.legend()
+nb_299986,40.0,1,other,"mlp = MLPClassifier(solver=""lbfgs"", hidden_layer_sizes=(2,), random_state=0).fit(X_train_scaled, y_train)"
+nb_299986,40.0,2,print,"print(mlp.score(X_train_scaled, y_train))"
+nb_299986,40.0,3,print,"print(mlp.score(X_test_scaled, y_test))"
+nb_299986,176.0,1,other,from sklearn.linear_model import LogisticRegression
+nb_299986,176.0,2,other,"LogisticRegression().fit(X_train_scaled, y_train).score(X_test_scaled, y_test)"
+nb_299986,41.0,1,other,class NeuralNetwork(object):
+nb_299986,41.0,2,other,    def __init__(self):
+nb_299986,41.0,3,other,        # initialize coefficients and biases
+nb_299986,41.0,4,other,        pass
+nb_299986,41.0,5,other,"    def forward(self, x):"
+nb_299986,41.0,6,other,        activation = x
+nb_299986,41.0,7,other,"        for coef, bias in zip(self.coef_, self.bias_):"
+nb_299986,41.0,8,other,"            activation = self.nonlinearity(np.dot(activation, coef) + bias)"
+nb_299986,41.0,9,other,        return activation
+nb_299986,41.0,10,other,"    def backward(self, x):"
+nb_299986,41.0,11,other,        # compute gradient of stuff in forward pass
+nb_299986,41.0,12,other,        pass
+nb_299986,43.0,2,other,class array(object) :
+nb_299986,43.0,3,other,"    """"""Simple Array object that support autodiff."""""""
+nb_299986,43.0,4,other,"    def __init__(self, value, name=None):"
+nb_299986,43.0,5,print,        self.value = value
+nb_299986,43.0,6,other,        if name:
+nb_299986,43.0,7,other,            self.grad = lambda g : {name : g}
+nb_299986,43.0,9,other,"    def __add__(self, other):"
+nb_299986,43.0,10,other,"        assert isinstance(other, int)"
+nb_299986,43.0,11,print,        ret = array(self.value + other)
+nb_299986,43.0,12,other,        ret.grad = lambda g : self.grad(g)
+nb_299986,43.0,13,other,        return ret
+nb_299986,43.0,15,other,"    def __mul__(self, other):"
+nb_299986,43.0,16,other,"        assert isinstance(other, array)"
+nb_299986,43.0,17,print,        ret = array(self.value * other.value)
+nb_299986,43.0,18,other,        def grad(g):
+nb_299986,43.0,19,print,            x = self.grad(g * other.value)
+nb_299986,43.0,20,print,            x.update(other.grad(g * self.value))
+nb_299986,43.0,21,other,            return x
+nb_299986,43.0,22,other,        ret.grad = grad
+nb_299986,43.0,23,other,        return ret
+nb_299986,48.0,2,other,"a = array(np.array([1, 2]), 'a')"
+nb_299986,48.0,3,other,"b = array(np.array([3, 4]), 'b')"
+nb_299986,48.0,4,other,c = b * a
+nb_299986,48.0,5,other,d = c + 1
+nb_299986,48.0,6,print,print(d.value)
+nb_299986,48.0,7,print,print(d.grad(1))

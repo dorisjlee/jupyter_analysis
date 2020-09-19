@@ -1,0 +1,743 @@
+name,cell,line,category,text
+nb_1063377,1.0,1,other,import pandas as pd
+nb_1063377,1.0,2,other,import time
+nb_1063377,1.0,3,other,import numpy as np
+nb_1063377,1.0,4,postprocessing,"from sklearn.model_selection import train_test_split, StratifiedKFold, KFold"
+nb_1063377,1.0,5,other,
+nb_1063377,1.0,6,preprocessing,"from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer"
+nb_1063377,1.0,7,other,import random
+nb_1063377,1.0,8,other,from sklearn import preprocessing
+nb_1063377,1.0,9,other,
+nb_1063377,1.0,10,other,import gc
+nb_1063377,1.0,11,other,"from scipy.stats import skew, boxcox"
+nb_1063377,1.0,12,other,
+nb_1063377,1.0,13,other,from scipy import sparse
+nb_1063377,1.0,14,postprocessing,from sklearn.metrics import log_loss
+nb_1063377,1.0,15,other,from datetime import datetime
+nb_1063377,1.0,16,other,
+nb_1063377,1.0,17,other,import matplotlib.pyplot as plt
+nb_1063377,1.0,18,other,import seaborn as sns
+nb_1063377,1.0,19,other,%matplotlib inline
+nb_1063377,1.0,20,other,
+nb_1063377,1.0,21,other,seed = 2017
+nb_1063377,2.0,1,other,from keras.models import Sequential
+nb_1063377,2.0,2,other,"from keras.layers import Dense, Dropout, Activation"
+nb_1063377,2.0,3,other,from keras.layers.normalization import BatchNormalization
+nb_1063377,2.0,4,other,"from keras.layers.advanced_activations import PReLU,LeakyReLU,ELU,ParametricSoftplus,ThresholdedReLU,SReLU"
+nb_1063377,2.0,5,other,"from keras.callbacks import EarlyStopping, ModelCheckpoint"
+nb_1063377,2.0,6,other,from keras import backend as K
+nb_1063377,2.0,7,other,"from keras.optimizers import SGD,Nadam"
+nb_1063377,2.0,8,other,"from keras.regularizers import WeightRegularizer, ActivityRegularizer,l2, activity_l2"
+nb_1063377,2.0,9,other,from keras.utils.np_utils import to_categorical
+nb_1063377,3.0,1,create,train_y = np.ravel(pd.read_csv('../input/' + 'labels_BrandenMurray.csv'))
+nb_1063377,3.0,2,other,train_y = to_categorical(train_y)
+nb_1063377,3.0,3,other,
+nb_1063377,3.0,4,other,"names = ['low_0','medium_0','high_0',"
+nb_1063377,3.0,5,other,"        'low_1','medium_1','high_1',"
+nb_1063377,3.0,6,other,"        'low_2','medium_2','high_2',"
+nb_1063377,3.0,7,other,"        'low_3','medium_3','high_3',"
+nb_1063377,3.0,8,other,"        'low_4','medium_4','high_4',"
+nb_1063377,3.0,9,other,"        'low_5','medium_5','high_5',"
+nb_1063377,3.0,10,other,"        'low_6','medium_6','high_6',"
+nb_1063377,3.0,11,other,"        'low_7','medium_7','high_7',"
+nb_1063377,3.0,12,other,"        'low_8','medium_8','high_8',"
+nb_1063377,3.0,13,other,"        'low_9','medium_9','high_9']"
+nb_1063377,3.0,14,other,
+nb_1063377,3.0,15,other,"data_path = ""../2ndlast/"""
+nb_1063377,3.0,16,other,total_col = 0
+nb_1063377,4.0,1,other,# RFC 1st level 
+nb_1063377,4.0,2,other,file_train      = 'train_blend_RFC_entropy_last_2017-04-21-11-06' + '.csv'
+nb_1063377,4.0,3,other,file_test_mean  = 'test_blend_RFC_entropy_mean_last_2017-04-21-11-06' + '.csv'
+nb_1063377,4.0,4,other,
+nb_1063377,4.0,5,create,"train_rfc = pd.read_csv(data_path + file_train,      header = None)"
+nb_1063377,4.0,6,create,"test_rfc  = pd.read_csv(data_path + file_test_mean,  header = None)"
+nb_1063377,4.0,7,other,
+nb_1063377,4.0,8,other,
+nb_1063377,4.0,9,print,n_column = train_rfc.shape[1]
+nb_1063377,4.0,10,other,total_col += n_column
+nb_1063377,4.0,11,other,
+nb_1063377,4.0,12,print,train_rfc.columns = ['rfc_' + x for x in names[:n_column]]
+nb_1063377,4.0,13,print,test_rfc.columns  = ['rfc_' + x for x in names[:n_column]]
+nb_1063377,4.0,14,other,
+nb_1063377,4.0,15,other,
+nb_1063377,4.0,16,cleaning,"print train_rfc.iloc[:5,:3]"
+nb_1063377,4.0,17,other,
+nb_1063377,4.0,18,cleaning,"print test_rfc.iloc[:5,:3]"
+nb_1063377,5.0,1,other,# LR 1st level
+nb_1063377,5.0,2,other,file_train      = 'train_blend_LR_last_2017-04-21-11-16' + '.csv'
+nb_1063377,5.0,3,other,file_test_mean  = 'test_blend_LR_mean_last_2017-04-21-11-16' + '.csv'
+nb_1063377,5.0,4,other,
+nb_1063377,5.0,5,create,"train_LR = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,5.0,6,create,"test_LR  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,5.0,7,other,
+nb_1063377,5.0,8,print,n_column = train_LR.shape[1]
+nb_1063377,5.0,9,other,total_col += n_column
+nb_1063377,5.0,10,other,
+nb_1063377,5.0,11,print,train_LR.columns = ['LR_' + x for x in names[:n_column]]
+nb_1063377,5.0,12,print,test_LR.columns  = ['LR_' + x for x in names[:n_column]]
+nb_1063377,5.0,13,other,
+nb_1063377,5.0,14,cleaning,"print train_LR.iloc[:5,:3]"
+nb_1063377,5.0,15,cleaning,"print test_LR.iloc[:5,:3]"
+nb_1063377,6.0,1,other,# ET 1st level
+nb_1063377,6.0,2,other,file_train      = 'train_blend_ET_entropy_last_2017-04-21-11-48' + '.csv'
+nb_1063377,6.0,3,other,file_test_mean  = 'test_blend_ET_entropy_mean_last_2017-04-21-11-48' + '.csv'
+nb_1063377,6.0,4,other,
+nb_1063377,6.0,5,create,"train_ET = pd.read_csv(data_path + file_train,      header = None)"
+nb_1063377,6.0,6,create,"test_ET  = pd.read_csv(data_path + file_test_mean,  header = None)"
+nb_1063377,6.0,7,other,
+nb_1063377,6.0,8,print,n_column = train_ET.shape[1]
+nb_1063377,6.0,9,other,total_col += n_column
+nb_1063377,6.0,10,other,
+nb_1063377,6.0,11,print,train_ET.columns = ['ET_' + x for x in names[:n_column]]
+nb_1063377,6.0,12,print,test_ET.columns  = ['ET_' + x for x in names[:n_column]]
+nb_1063377,6.0,13,other,
+nb_1063377,6.0,14,cleaning,"print train_ET.iloc[:5,:3]"
+nb_1063377,6.0,15,cleaning,"print test_ET.iloc[:5,:3]"
+nb_1063377,7.0,1,other,# KNN 1st level
+nb_1063377,7.0,2,other,file_train      = 'train_blend_KNN_uniform_last_2017-04-21-13-53' + '.csv'
+nb_1063377,7.0,3,other,file_test_mean  = 'test_blend_KNN_uniform_mean_last_2017-04-21-13-53' + '.csv'
+nb_1063377,7.0,4,other,
+nb_1063377,7.0,5,other,
+nb_1063377,7.0,6,create,"train_KNN = pd.read_csv(data_path + file_train,      header = None)"
+nb_1063377,7.0,7,create,"test_KNN  = pd.read_csv(data_path + file_test_mean,  header = None)"
+nb_1063377,7.0,8,other,
+nb_1063377,7.0,9,other,
+nb_1063377,7.0,10,print,n_column = train_KNN.shape[1]
+nb_1063377,7.0,11,other,total_col += n_column
+nb_1063377,7.0,12,other,
+nb_1063377,7.0,13,print,train_KNN.columns      = ['KNN_uniform_' + x for x in names[:n_column]]
+nb_1063377,7.0,14,print,test_KNN.columns  = ['KNN_uniform_' + x for x in names[:n_column]]
+nb_1063377,7.0,15,other,
+nb_1063377,7.0,16,cleaning,"print train_KNN.iloc[:5,:3]"
+nb_1063377,7.0,17,cleaning,"print test_KNN.iloc[:5,:3]"
+nb_1063377,8.0,1,other,# TFFM 1st level 0322
+nb_1063377,8.0,2,other,file_train      = 'train_blend_FM_BM_0322_2017-03-27-04-35' + '.csv'
+nb_1063377,8.0,3,other,file_test_mean  = 'test_blend_FM_mean_BM_0322_2017-03-27-04-35' + '.csv'
+nb_1063377,8.0,4,other,
+nb_1063377,8.0,5,create,"train_FM_0322      = pd.read_csv(data_path + file_train,      header = None)"
+nb_1063377,8.0,6,create,"test_FM_mean_0322  = pd.read_csv(data_path + file_test_mean,  header = None)"
+nb_1063377,8.0,7,other,
+nb_1063377,8.0,8,print,n_column = train_FM_0322.shape[1]
+nb_1063377,8.0,9,other,total_col += n_column
+nb_1063377,8.0,10,other,
+nb_1063377,8.0,11,print,train_FM_0322.columns      = ['FM_0322_' + x for x in names[:n_column]]
+nb_1063377,8.0,12,print,test_FM_mean_0322.columns  = ['FM_0322_' + x for x in names[:n_column]]
+nb_1063377,8.0,13,other,
+nb_1063377,8.0,14,cleaning,"print train_FM_0322.iloc[:5,:3]"
+nb_1063377,8.0,15,cleaning,"print test_FM_mean_0322.iloc[:5,:3]"
+nb_1063377,9.0,1,other,# Multinomial Naive Bayes 1st level
+nb_1063377,9.0,2,other,file_train      = 'train_blend_MNB_BM_MB_last_2017-04-21-14-02' + '.csv'
+nb_1063377,9.0,3,other,file_test_mean  = 'test_blend_MNB_mean_BM_MB_last_2017-04-21-14-02' + '.csv'
+nb_1063377,9.0,4,other,
+nb_1063377,9.0,5,other,
+nb_1063377,9.0,6,create,"train_MNB      = pd.read_csv(data_path + file_train,      header = None)"
+nb_1063377,9.0,7,create,"test_MNB_mean  = pd.read_csv(data_path + file_test_mean,  header = None)"
+nb_1063377,9.0,8,other,
+nb_1063377,9.0,9,other,
+nb_1063377,9.0,10,print,n_column = train_MNB.shape[1]
+nb_1063377,9.0,11,other,total_col += n_column
+nb_1063377,9.0,12,other,
+nb_1063377,9.0,13,print,train_MNB.columns      = ['MNB_' + x for x in names[:n_column]]
+nb_1063377,9.0,14,print,test_MNB_mean.columns  = ['MNB_' + x for x in names[:n_column]]
+nb_1063377,9.0,15,other,
+nb_1063377,9.0,16,cleaning,"print train_MNB.iloc[:5,:3]"
+nb_1063377,9.0,17,cleaning,"print test_MNB_mean.iloc[:5,:3]"
+nb_1063377,10.0,1,other,# TSNE 1st level
+nb_1063377,10.0,2,other,
+nb_1063377,10.0,3,other,file_train = 'X_train_tsne_BM_MB_add_desc_2017-03-18-17-14' + '.csv'
+nb_1063377,10.0,4,other,file_test  = 'X_test_tsne_BM_MB_add_desc_2017-03-18-17-14' + '.csv'
+nb_1063377,10.0,5,other,
+nb_1063377,10.0,6,create,"train_tsne = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,10.0,7,create,"test_tsne  = pd.read_csv(data_path + file_test, header = None)"
+nb_1063377,10.0,8,other,
+nb_1063377,10.0,9,other,
+nb_1063377,10.0,10,print,n_column = train_tsne.shape[1]
+nb_1063377,10.0,11,other,total_col += n_column
+nb_1063377,10.0,12,other,
+nb_1063377,10.0,13,print,"train_tsne.columns = ['tsne_0', 'tsne_1', 'tsne_2']"
+nb_1063377,10.0,14,print,"test_tsne.columns  = ['tsne_0', 'tsne_1', 'tsne_2']"
+nb_1063377,10.0,15,other,
+nb_1063377,10.0,16,other,
+nb_1063377,10.0,17,cleaning,"print train_tsne.iloc[:5,:3]"
+nb_1063377,10.0,18,cleaning,"print test_tsne.iloc[:5,:3]"
+nb_1063377,11.0,1,other,# TSNE 1st level 0322
+nb_1063377,11.0,2,other,
+nb_1063377,11.0,3,other,file_train = 'X_train_tsne_BM_0322_2017-03-26-16-33' + '.csv'
+nb_1063377,11.0,4,other,file_test  = 'X_test_tsne_BM_0322_2017-03-26-16-33' + '.csv'
+nb_1063377,11.0,5,other,
+nb_1063377,11.0,6,create,"train_tsne_0322 = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,11.0,7,create,"test_tsne_0322  = pd.read_csv(data_path + file_test, header = None)"
+nb_1063377,11.0,8,other,
+nb_1063377,11.0,9,print,n_column = train_tsne_0322.shape[1]
+nb_1063377,11.0,10,other,total_col += n_column
+nb_1063377,11.0,11,other,
+nb_1063377,11.0,12,print,"train_tsne_0322.columns = ['tsne_0_0322', 'tsne_1_0322', 'tsne_2_0322']"
+nb_1063377,11.0,13,print,"test_tsne_0322.columns  = ['tsne_0_0322', 'tsne_1_0322', 'tsne_2_0322']"
+nb_1063377,11.0,14,other,
+nb_1063377,11.0,15,cleaning,"print train_tsne_0322.iloc[:5,:3]"
+nb_1063377,11.0,16,cleaning,"print test_tsne_0322.iloc[:5,:3]"
+nb_1063377,12.0,1,other,# XGB 1st level
+nb_1063377,12.0,2,other,
+nb_1063377,12.0,3,other,file_train     = 'train_blend_XGB_BM_2bagging_CV_MS_52571_2017-04-20-23-06' + '.csv'
+nb_1063377,12.0,4,other,file_test_mean = 'test_blend_XGB_BM_2bagging_CV_MS_52571_2017-04-20-23-06' + '.csv'
+nb_1063377,12.0,5,other,
+nb_1063377,12.0,6,other,
+nb_1063377,12.0,7,create,"train_xgb      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,12.0,8,create,"test_xgb_mean  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,12.0,9,other,
+nb_1063377,12.0,10,other,tmp_train = train_xgb*2
+nb_1063377,12.0,11,other,tmp_test  = test_xgb_mean*2
+nb_1063377,12.0,12,other,
+nb_1063377,12.0,13,other,file_train     = 'train_blend_XGB_BM_20bagging_last_2017-04-21-19-08' + '.csv'
+nb_1063377,12.0,14,other,file_test_mean = 'test_blend_XGB_BM_20bagging_last_2017-04-21-19-08' + '.csv'
+nb_1063377,12.0,15,other,
+nb_1063377,12.0,16,create,"train_xgb      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,12.0,17,create,"test_xgb_mean  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,12.0,18,other,
+nb_1063377,12.0,19,other,train_xgb      = (tmp_train + train_xgb*20) / 22.0
+nb_1063377,12.0,20,other,test_xgb_mean  = (tmp_test + test_xgb_mean*20) / 22.0
+nb_1063377,12.0,21,other,
+nb_1063377,12.0,22,print,n_column = train_xgb.shape[1]
+nb_1063377,12.0,23,other,total_col += n_column
+nb_1063377,12.0,24,other,
+nb_1063377,12.0,25,print,train_xgb.columns = ['xgb_' + x for x in names[:n_column]]
+nb_1063377,12.0,26,print,test_xgb_mean.columns = ['xgb_' + x for x in names[:n_column]]
+nb_1063377,12.0,27,other,
+nb_1063377,12.0,28,cleaning,"print train_xgb.iloc[:5,:3]"
+nb_1063377,12.0,29,cleaning,"print test_xgb_mean.iloc[:5,:3]"
+nb_1063377,13.0,1,other,# XGB 1st level 30fold
+nb_1063377,13.0,2,other,
+nb_1063377,13.0,3,other,file_train      = 'train_blend_XGB_last_30fold_2017-04-21-12-57' + '.csv'
+nb_1063377,13.0,4,other,file_test_mean  = 'test_blend_XGB_last_30fold_2017-04-21-12-57' + '.csv'
+nb_1063377,13.0,5,other,
+nb_1063377,13.0,6,other,
+nb_1063377,13.0,7,create,"train_xgb_30fold      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,13.0,8,create,"test_xgb_mean_30fold  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,13.0,9,other,
+nb_1063377,13.0,10,other,
+nb_1063377,13.0,11,print,n_column = train_xgb_30fold.shape[1]
+nb_1063377,13.0,12,other,total_col += n_column
+nb_1063377,13.0,13,other,
+nb_1063377,13.0,14,print,train_xgb_30fold.columns      = ['xgb_30fold_' + x for x in names[:n_column]]
+nb_1063377,13.0,15,print,test_xgb_mean_30fold.columns  = ['xgb_30fold_' + x for x in names[:n_column]]
+nb_1063377,13.0,16,other,
+nb_1063377,13.0,17,cleaning,"print train_xgb_30fold.iloc[:5,:3]"
+nb_1063377,13.0,18,cleaning,"print test_xgb_mean_30fold.iloc[:5,:3]"
+nb_1063377,14.0,1,other,# XGB one vs rest 1st level
+nb_1063377,14.0,2,other,
+nb_1063377,14.0,3,other,file_train      = 'train_blend_xgb_ovr_last_2017-04-21-10-09' + '.csv'
+nb_1063377,14.0,4,other,file_test_mean  = 'test_blend_xgb_ovr_mean_last_2017-04-21-10-09' + '.csv'
+nb_1063377,14.0,5,other,
+nb_1063377,14.0,6,create,"train_xgb_ovr      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,14.0,7,create,"test_xgb_mean_ovr  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,14.0,8,other,
+nb_1063377,14.0,9,other,
+nb_1063377,14.0,10,print,n_column = train_xgb_ovr.shape[1]
+nb_1063377,14.0,11,other,total_col += n_column
+nb_1063377,14.0,12,other,
+nb_1063377,14.0,13,print,train_xgb_ovr.columns      = ['xgb_ovr_' + x for x in names[:n_column]]
+nb_1063377,14.0,14,print,test_xgb_mean_ovr.columns  = ['xgb_ovr_' + x for x in names[:n_column]]
+nb_1063377,14.0,15,other,
+nb_1063377,14.0,16,stats,"sum_train = np.sum(train_xgb_ovr,axis=1)"
+nb_1063377,14.0,17,stats,"sum_test  = np.sum(test_xgb_mean_ovr,axis=1)"
+nb_1063377,14.0,18,other,
+nb_1063377,14.0,19,print,for col in train_xgb_ovr.columns.values:
+nb_1063377,14.0,20,other,    train_xgb_ovr[col] = train_xgb_ovr[col] / sum_train
+nb_1063377,14.0,21,other,    test_xgb_mean_ovr[col] = test_xgb_mean_ovr[col] / sum_test
+nb_1063377,14.0,22,other,
+nb_1063377,14.0,23,other,
+nb_1063377,14.0,24,cleaning,"print train_xgb_ovr.iloc[:5,:3]"
+nb_1063377,14.0,25,cleaning,"print test_xgb_mean_ovr.iloc[:5,:3]"
+nb_1063377,15.0,1,other,# LightGBM 1st level
+nb_1063377,15.0,2,other,
+nb_1063377,15.0,3,other,file_train      = 'train_blend_LightGBM_last_10bagging_2017-04-21-21-54' + '.csv'
+nb_1063377,15.0,4,other,file_test_mean  = 'test_blend_LightGBM_mean_last_10bagging_2017-04-21-21-54' + '.csv'
+nb_1063377,15.0,5,other,
+nb_1063377,15.0,6,other,
+nb_1063377,15.0,7,create,"train_lgb      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,15.0,8,create,"test_lgb_mean  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,15.0,9,other,
+nb_1063377,15.0,10,print,n_column = train_lgb.shape[1]
+nb_1063377,15.0,11,other,total_col += n_column
+nb_1063377,15.0,12,other,
+nb_1063377,15.0,13,print,train_lgb.columns      = ['lgb_10bag_' + x for x in names[:n_column]]
+nb_1063377,15.0,14,print,test_lgb_mean.columns  = ['lgb_10bag_' + x for x in names[:n_column]]
+nb_1063377,15.0,15,other,
+nb_1063377,15.0,16,cleaning,"print train_lgb.iloc[:5,:3]"
+nb_1063377,15.0,17,cleaning,"print test_lgb_mean.iloc[:5,:3]"
+nb_1063377,16.0,1,other,# Keras 1st level No.1
+nb_1063377,16.0,2,other,
+nb_1063377,16.0,3,other,file_train      = 'train_blend_Keras_last_2017-04-20-21-23' + '.csv'
+nb_1063377,16.0,4,other,file_test_mean  = 'test_blend_Keras_mean_last_2017-04-20-21-23' + '.csv'
+nb_1063377,16.0,5,other,
+nb_1063377,16.0,6,other,
+nb_1063377,16.0,7,create,"tmp_train = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,16.0,8,create,"tmp_test  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,16.0,9,other,
+nb_1063377,16.0,10,cleaning,"train_nn     = tmp_train[[0, 1, 2]]+(tmp_train[[3, 4, 5]]).rename(columns = {3:0,4:1,5:2})"
+nb_1063377,16.0,11,cleaning,"test_nn_mean = tmp_test[[0, 1, 2]]+(tmp_test[[3, 4, 5]]).rename(columns = {3:0,4:1,5:2})"
+nb_1063377,16.0,12,other,
+nb_1063377,16.0,13,other,file_train      = 'train_blend_Keras_last_2017-04-20-22-05' + '.csv'
+nb_1063377,16.0,14,other,file_test_mean  = 'test_blend_Keras_mean_last_2017-04-20-22-05' + '.csv'
+nb_1063377,16.0,15,other,
+nb_1063377,16.0,16,create,"tmp_train = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,16.0,17,create,"tmp_test  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,16.0,18,other,
+nb_1063377,16.0,19,cleaning,"train_nn     = (train_nn + tmp_train[[0, 1, 2]]+(tmp_train[[3, 4, 5]]).rename(columns = {3:0,4:1,5:2}))/4"
+nb_1063377,16.0,20,cleaning,"test_nn_mean = (test_nn_mean + tmp_test[[0, 1, 2]]+(tmp_test[[3, 4, 5]]).rename(columns = {3:0,4:1,5:2}))/4"
+nb_1063377,16.0,21,other,
+nb_1063377,16.0,22,other,
+nb_1063377,16.0,23,print,n_column = train_nn.shape[1]
+nb_1063377,16.0,24,other,total_col += n_column
+nb_1063377,16.0,25,other,
+nb_1063377,16.0,26,print,train_nn.columns      = ['nn_' + x for x in names[:n_column]]
+nb_1063377,16.0,27,print,test_nn_mean.columns  = ['nn_' + x for x in names[:n_column]]
+nb_1063377,16.0,28,other,
+nb_1063377,16.0,29,cleaning,"print train_nn.iloc[:5,:3]"
+nb_1063377,16.0,30,cleaning,"print test_nn_mean.iloc[:5,:3]"
+nb_1063377,17.0,1,other,# Keras 1st level 30fold
+nb_1063377,17.0,2,other,
+nb_1063377,17.0,3,other,file_train      = 'train_blend_Keras_last_30fold_2017-04-21-12-03' + '.csv'
+nb_1063377,17.0,4,other,file_test_mean  = 'test_blend_Keras_mean_last_30fold_2017-04-21-12-03' + '.csv'
+nb_1063377,17.0,5,other,
+nb_1063377,17.0,6,create,"train_nn_30fold     = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,17.0,7,create,"test_nn_mean_30fold  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,17.0,8,other,
+nb_1063377,17.0,9,print,n_column = train_nn_30fold.shape[1]
+nb_1063377,17.0,10,other,total_col += n_column
+nb_1063377,17.0,11,other,
+nb_1063377,17.0,12,print,train_nn_30fold.columns      = ['nn_30fold_' + x for x in names[:n_column]]
+nb_1063377,17.0,13,print,test_nn_mean_30fold.columns  = ['nn_30fold_' + x for x in names[:n_column]]
+nb_1063377,17.0,14,other,
+nb_1063377,17.0,15,cleaning,"print train_nn_30fold.iloc[:5,:3]"
+nb_1063377,17.0,16,cleaning,"print test_nn_mean_30fold.iloc[:5,:3]"
+nb_1063377,18.0,1,other,# Keras one vs rest 1st level
+nb_1063377,18.0,2,other,file_train      = 'train_blend_Keras_ovr_last_2017-04-21-10-15' + '.csv'
+nb_1063377,18.0,3,other,file_test_mean  = 'test_blend_Keras_ovr_last_2017-04-21-10-15' + '.csv'
+nb_1063377,18.0,4,other,
+nb_1063377,18.0,5,create,"train_nn_ovr      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,18.0,6,create,"test_nn_mean_ovr  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,18.0,7,other,
+nb_1063377,18.0,8,print,n_column = train_nn_ovr.shape[1]
+nb_1063377,18.0,9,other,total_col += n_column
+nb_1063377,18.0,10,other,
+nb_1063377,18.0,11,print,train_nn_ovr.columns      = ['nn_ovr_' + x for x in names[:n_column]]
+nb_1063377,18.0,12,print,test_nn_mean_ovr.columns  = ['nn_ovr_' + x for x in names[:n_column]]
+nb_1063377,18.0,13,other,
+nb_1063377,18.0,14,stats,"sum_train = np.sum(train_nn_ovr,axis=1)"
+nb_1063377,18.0,15,stats,"sum_test  = np.sum(test_nn_mean_ovr,axis=1)"
+nb_1063377,18.0,16,other,
+nb_1063377,18.0,17,print,for col in train_nn_ovr.columns.values:
+nb_1063377,18.0,18,other,    train_nn_ovr[col] = train_nn_ovr[col] / sum_train
+nb_1063377,18.0,19,other,    test_nn_mean_ovr[col] = test_nn_mean_ovr[col] / sum_test 
+nb_1063377,18.0,20,other,
+nb_1063377,18.0,21,cleaning,"print train_nn_ovr.iloc[:5,:3]"
+nb_1063377,18.0,22,cleaning,"print test_nn_mean_ovr.iloc[:5,:3]"
+nb_1063377,19.0,1,other,# Keras 1st level 3layer 20 bagging
+nb_1063377,19.0,2,other,file_train      = 'train_blend_Keras_last_3layer_20bagging_2017-04-21-20-01' + '.csv'
+nb_1063377,19.0,3,other,file_test_mean  = 'test_blend_Keras_mean_last_3layer_20bagging_2017-04-21-20-01' + '.csv'
+nb_1063377,19.0,4,other,
+nb_1063377,19.0,5,create,"train_nn_3layer      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,19.0,6,create,"test_nn_mean_3layer  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,19.0,7,other,
+nb_1063377,19.0,8,print,n_column = train_nn_3layer.shape[1]
+nb_1063377,19.0,9,other,total_col += n_column
+nb_1063377,19.0,10,other,
+nb_1063377,19.0,11,print,train_nn_3layer.columns      = ['nn_3layer_' + x for x in names[:n_column]]
+nb_1063377,19.0,12,print,test_nn_mean_3layer.columns  = ['nn_3layer_' + x for x in names[:n_column]]
+nb_1063377,19.0,13,other,
+nb_1063377,19.0,14,other,
+nb_1063377,19.0,15,cleaning,"print train_nn_3layer.iloc[:5,:3]"
+nb_1063377,19.0,16,cleaning,"print test_nn_mean_3layer.iloc[:5,:3]"
+nb_1063377,20.0,1,other,data_path = '../3rd/'
+nb_1063377,21.0,1,other,# Keras 2nd level 
+nb_1063377,21.0,2,other,
+nb_1063377,21.0,3,other,file_train      = 'train_blend_2ndKeras_100bagging_2017-04-22-18-54' + '.csv'
+nb_1063377,21.0,4,other,file_test_mean  = 'test_blend_2ndKeras_100bagging_2017-04-22-18-54' + '.csv'
+nb_1063377,21.0,5,other,
+nb_1063377,21.0,6,other,
+nb_1063377,21.0,7,create,"train_nn_2nd      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,21.0,8,create,"test_nn_mean_2nd  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,21.0,9,other,
+nb_1063377,21.0,10,print,n_column = train_nn.shape[1]
+nb_1063377,21.0,11,other,total_col += n_column
+nb_1063377,21.0,12,other,
+nb_1063377,21.0,13,print,train_nn_2nd.columns      = ['nn_2nd_' + x for x in names[:n_column]]
+nb_1063377,21.0,14,print,test_nn_mean_2nd.columns  = ['nn_2nd_' + x for x in names[:n_column]]
+nb_1063377,21.0,15,other,
+nb_1063377,21.0,16,cleaning,"print train_nn_2nd.iloc[:5,:3]"
+nb_1063377,21.0,17,cleaning,"print test_nn_mean_2nd.iloc[:5,:3]"
+nb_1063377,22.0,1,other,# XGB 2nd level
+nb_1063377,22.0,2,other,
+nb_1063377,22.0,3,other,file_train     = 'train_blend_2ndXGB_BM_100bagging_2017-04-22-07-18' + '.csv'
+nb_1063377,22.0,4,other,file_test_mean = 'test_blend_2ndXGB_BM_100bagging_2017-04-22-07-18' + '.csv'
+nb_1063377,22.0,5,other,
+nb_1063377,22.0,6,other,
+nb_1063377,22.0,7,create,"train_xgb_2nd      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,22.0,8,create,"test_xgb_mean_2nd  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,22.0,9,other,
+nb_1063377,22.0,10,other,tmp_train = train_xgb_2nd
+nb_1063377,22.0,11,other,tmp_test  = test_xgb_mean_2nd
+nb_1063377,22.0,12,other,
+nb_1063377,22.0,13,other,file_train     = 'train_blend_2ndXGB_BM_100bagging_1_2017-04-22-14-37' + '.csv'
+nb_1063377,22.0,14,other,file_test_mean = 'test_blend_2ndXGB_BM_100bagging_1_2017-04-22-14-37' + '.csv'
+nb_1063377,22.0,15,other,
+nb_1063377,22.0,16,create,"train_xgb_2nd      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,22.0,17,create,"test_xgb_mean_2nd  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,22.0,18,other,
+nb_1063377,22.0,19,other,train_xgb_2nd      = (tmp_train + train_xgb_2nd) / 2.0
+nb_1063377,22.0,20,other,test_xgb_mean_2nd  = (tmp_test + test_xgb_mean_2nd) / 2.0
+nb_1063377,22.0,21,other,
+nb_1063377,22.0,22,print,n_column = train_xgb_2nd.shape[1]
+nb_1063377,22.0,23,other,total_col += n_column
+nb_1063377,22.0,24,other,
+nb_1063377,22.0,25,print,train_xgb_2nd.columns = ['xgb_2nd_' + x for x in names[:n_column]]
+nb_1063377,22.0,26,print,test_xgb_mean_2nd.columns = ['xgb_2nd_' + x for x in names[:n_column]]
+nb_1063377,22.0,27,other,
+nb_1063377,22.0,28,cleaning,"print train_xgb_2nd.iloc[:5,:3]"
+nb_1063377,22.0,29,cleaning,"print test_xgb_mean_2nd.iloc[:5,:3]"
+nb_1063377,23.0,1,other,# ADET 2nd level
+nb_1063377,23.0,2,other,
+nb_1063377,23.0,3,other,file_train     = 'train_blend_2ndADET_100bagging_last_2017-04-22-04-30' + '.csv'
+nb_1063377,23.0,4,other,file_test_mean = 'test_blend_2ndADET_100bagging_last_2017-04-22-04-30' + '.csv'
+nb_1063377,23.0,5,other,
+nb_1063377,23.0,6,other,
+nb_1063377,23.0,7,create,"train_ADET_2nd      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,23.0,8,create,"test_ADET_mean_2nd  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,23.0,9,other,
+nb_1063377,23.0,10,other,tmp_train = train_ADET_2nd
+nb_1063377,23.0,11,other,tmp_test  = test_ADET_mean_2nd
+nb_1063377,23.0,12,other,
+nb_1063377,23.0,13,other,file_train     = 'train_blend_2ndADET_100bagging_last_1_2017-04-22-10-08' + '.csv'
+nb_1063377,23.0,14,other,file_test_mean = 'test_blend_2ndADET_100bagging_last_1_2017-04-22-10-08' + '.csv'
+nb_1063377,23.0,15,other,
+nb_1063377,23.0,16,create,"train_ADET_2nd      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,23.0,17,create,"test_ADET_mean_2nd  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,23.0,18,other,
+nb_1063377,23.0,19,other,tmp_train = tmp_train + train_ADET_2nd
+nb_1063377,23.0,20,other,tmp_test  = tmp_test + test_ADET_mean_2nd
+nb_1063377,23.0,21,other,
+nb_1063377,23.0,22,other,file_train     = 'train_blend_2ndADET_100bagging_last_2_2017-04-22-17-43' + '.csv'
+nb_1063377,23.0,23,other,file_test_mean = 'test_blend_2ndADET_100bagging_last_2_2017-04-22-17-43' + '.csv'
+nb_1063377,23.0,24,other,
+nb_1063377,23.0,25,create,"train_ADET_2nd      = pd.read_csv(data_path + file_train, header = None)"
+nb_1063377,23.0,26,create,"test_ADET_mean_2nd  = pd.read_csv(data_path + file_test_mean, header = None)"
+nb_1063377,23.0,27,other,
+nb_1063377,23.0,28,other,train_ADET_2nd      = (tmp_train + train_ADET_2nd) / 3.0
+nb_1063377,23.0,29,other,test_ADET_mean_2nd  = (tmp_test + test_ADET_mean_2nd) / 3.0
+nb_1063377,23.0,30,other,
+nb_1063377,23.0,31,print,n_column = train_ADET_2nd.shape[1]
+nb_1063377,23.0,32,other,total_col += n_column
+nb_1063377,23.0,33,other,
+nb_1063377,23.0,34,print,train_ADET_2nd.columns = ['ADET_2nd_' + x for x in names[:n_column]]
+nb_1063377,23.0,35,print,test_ADET_mean_2nd.columns = ['ADET_2nd_' + x for x in names[:n_column]]
+nb_1063377,23.0,36,other,
+nb_1063377,23.0,37,cleaning,"print train_ADET_2nd.iloc[:5,:3]"
+nb_1063377,23.0,38,cleaning,"print test_ADET_mean_2nd.iloc[:5,:3]"
+nb_1063377,24.0,1,other,print total_col
+nb_1063377,25.0,1,join,"train_2nd      = pd.concat([train_rfc, train_LR, train_ET, train_KNN, train_FM_0322,    train_MNB,     train_tsne,"
+nb_1063377,25.0,2,other,"                            train_tsne_0322, train_xgb,     train_xgb_30fold,     train_xgb_ovr, "
+nb_1063377,25.0,3,other,"                            train_nn,     train_nn_30fold,     train_nn_ovr,     train_nn_3layer,"
+nb_1063377,25.0,4,other,"                            train_lgb,"
+nb_1063377,25.0,5,other,"                            train_nn_2nd, train_xgb_2nd, train_ADET_2nd"
+nb_1063377,25.0,6,other,"                           ], axis = 1)"
+nb_1063377,25.0,7,other,
+nb_1063377,25.0,8,join,"test_2nd_mean  = pd.concat([test_rfc,  test_LR,  test_ET,  test_KNN, test_FM_mean_0322, test_MNB_mean, test_tsne, "
+nb_1063377,25.0,9,other,"                            test_tsne_0322,  test_xgb_mean, test_xgb_mean_30fold, test_xgb_mean_ovr,"
+nb_1063377,25.0,10,other,"                            test_nn_mean, test_nn_mean_30fold, test_nn_mean_ovr, test_nn_mean_3layer,"
+nb_1063377,25.0,11,other,"                            test_lgb_mean,"
+nb_1063377,25.0,12,other,"                            test_nn_mean_2nd, test_xgb_mean_2nd, test_ADET_mean_2nd"
+nb_1063377,25.0,13,other,"                           ], axis = 1)"
+nb_1063377,25.0,14,other,
+nb_1063377,25.0,15,other,print 'train_2nd: {}\t test_2nd_mean:{}'.\
+nb_1063377,25.0,16,print,"            format(train_2nd.shape,test_2nd_mean.shape)"
+nb_1063377,26.0,1,other,"data_path = ""../input/"""
+nb_1063377,26.0,2,other,
+nb_1063377,26.0,3,create,train_X_0322 = pd.read_csv(data_path + 'train_BM_MB_add03052240.csv')
+nb_1063377,26.0,4,create,test_X_0322 = pd.read_csv(data_path + 'test_BM_MB_add03052240.csv')
+nb_1063377,26.0,5,other,
+nb_1063377,26.0,6,other,
+nb_1063377,26.0,7,print,ntrain = train_X_0322.shape[0]
+nb_1063377,26.0,8,print,sub_id = test_X_0322.listing_id.astype('int32').values
+nb_1063377,26.0,9,other,
+nb_1063377,26.0,10,create,train_X = pd.read_csv(data_path + 'train_CV_MS_52571.csv')
+nb_1063377,26.0,11,create,test_X = pd.read_csv(data_path + 'test_CV_MS_52571.csv')
+nb_1063377,26.0,12,other,
+nb_1063377,26.0,13,other,"train_X = train_X_0322[['listing_id']].merge(train_X,on='listing_id',how='left')"
+nb_1063377,26.0,14,other,"test_X = test_X_0322[['listing_id']].merge(test_X,on='listing_id',how='left')"
+nb_1063377,26.0,15,other,
+nb_1063377,26.0,16,print,"print train_X.shape, test_X.shape, train_y.shape"
+nb_1063377,27.0,1,create,time_feature = pd.read_csv(data_path + 'listing_image_time.csv')
+nb_1063377,27.0,2,print,"time_feature.columns = ['listing_id','time_stamp']"
+nb_1063377,27.0,3,other,"train_X = train_X.merge(time_feature,on='listing_id',how='left')"
+nb_1063377,27.0,4,other,"test_X = test_X.merge(time_feature,on='listing_id',how='left')"
+nb_1063377,27.0,5,other,
+nb_1063377,27.0,6,print,print train_X.shape
+nb_1063377,27.0,7,print,print test_X.shape
+nb_1063377,28.0,1,join,"train_X = pd.concat([train_X,train_2nd],axis=1)"
+nb_1063377,28.0,2,join,"test_X = pd.concat([test_X,test_2nd_mean],axis=1)"
+nb_1063377,28.0,3,other,
+nb_1063377,28.0,4,print,print train_X.shape
+nb_1063377,28.0,5,print,print test_X.shape
+nb_1063377,29.0,1,join,"full_data = pd.concat([train_X,test_X])"
+nb_1063377,29.0,2,print,print full_data.shape
+nb_1063377,30.0,1,cleaning,full_data = full_data.fillna(0)
+nb_1063377,30.0,2,other,
+nb_1063377,30.0,3,print,for col in full_data.columns.values:
+nb_1063377,30.0,4,stats,"    full_data.loc[:,col] = (full_data[col]-full_data[col].mean())/full_data[col].std()"
+nb_1063377,30.0,5,other,train_df_nn = full_data[:ntrain]
+nb_1063377,30.0,6,other,test_df_nn = full_data[ntrain:]
+nb_1063377,30.0,7,other,
+nb_1063377,30.0,8,other,train_df_nn = sparse.csr_matrix(train_df_nn)
+nb_1063377,30.0,9,other,test_df_nn = sparse.csr_matrix(test_df_nn)
+nb_1063377,30.0,10,other,
+nb_1063377,30.0,11,other,
+nb_1063377,30.0,12,print,print train_df_nn.shape
+nb_1063377,30.0,13,print,print test_df_nn.shape
+nb_1063377,31.0,1,print,full_data.isnull().values.any()
+nb_1063377,32.0,1,other,"X_train, X_val, y_train, y_val = train_test_split(train_df_nn, train_y, train_size=.80, random_state=3)"
+nb_1063377,33.0,1,other,"def batch_generator(X, y, batch_size, shuffle):"
+nb_1063377,33.0,2,print,    number_of_batches = np.ceil(X.shape[0]/batch_size)
+nb_1063377,33.0,3,other,    counter = 0
+nb_1063377,33.0,4,print,    sample_index = np.arange(X.shape[0])
+nb_1063377,33.0,5,other,    if shuffle:
+nb_1063377,33.0,6,other,        np.random.shuffle(sample_index)
+nb_1063377,33.0,7,other,    while True:
+nb_1063377,33.0,8,other,        batch_index = sample_index[batch_size*counter:batch_size*(counter+1)]
+nb_1063377,33.0,9,other,"        X_batch = X[batch_index,:].toarray()"
+nb_1063377,33.0,10,other,        y_batch = y[batch_index]
+nb_1063377,33.0,11,other,        counter += 1
+nb_1063377,33.0,12,other,"        yield X_batch, y_batch"
+nb_1063377,33.0,13,other,        if (counter == number_of_batches):
+nb_1063377,33.0,14,other,            if shuffle:
+nb_1063377,33.0,15,other,                np.random.shuffle(sample_index)
+nb_1063377,33.0,16,other,            counter = 0
+nb_1063377,33.0,17,other,
+nb_1063377,33.0,18,other,"def batch_generatorp(X, batch_size, shuffle):"
+nb_1063377,33.0,19,print,    number_of_batches = X.shape[0] / np.ceil(X.shape[0]/batch_size)
+nb_1063377,33.0,20,other,    counter = 0
+nb_1063377,33.0,21,print,    sample_index = np.arange(X.shape[0])
+nb_1063377,33.0,22,other,    while True:
+nb_1063377,33.0,23,other,        batch_index = sample_index[batch_size * counter:batch_size * (counter + 1)]
+nb_1063377,33.0,24,other,"        X_batch = X[batch_index, :].toarray()"
+nb_1063377,33.0,25,other,        counter += 1
+nb_1063377,33.0,26,other,        yield X_batch
+nb_1063377,33.0,27,other,        if (counter == number_of_batches):
+nb_1063377,33.0,28,other,            counter = 0
+nb_1063377,35.0,1,other,"early_stop = EarlyStopping(monitor='val_loss', # custom metric"
+nb_1063377,35.0,2,other,"                           patience=5, #early stopping for epoch"
+nb_1063377,35.0,3,other,                           verbose=0)
+nb_1063377,35.0,4,other,"checkpointer = ModelCheckpoint(filepath=""weights.hdf5"", "
+nb_1063377,35.0,5,other,"                               monitor='val_loss', "
+nb_1063377,35.0,6,other,"                               verbose=0, save_best_only=True)"
+nb_1063377,35.0,7,other,
+nb_1063377,35.0,8,other,def create_model(input_dim):
+nb_1063377,35.0,9,other,    model = Sequential()
+nb_1063377,35.0,10,other,    init = 'glorot_uniform'
+nb_1063377,35.0,11,other,    
+nb_1063377,35.0,12,other,    
+nb_1063377,35.0,13,other,"    model.add(Dense(70, # number of input units: needs to be tuned"
+nb_1063377,35.0,14,other,"                    input_dim = input_dim, # fixed length: number of columns of X"
+nb_1063377,35.0,15,other,"                    init=init,"
+nb_1063377,35.0,16,other,                   ))
+nb_1063377,35.0,17,other,    model.add(Activation('sigmoid'))
+nb_1063377,35.0,18,other,    model.add(PReLU()) # activation function
+nb_1063377,35.0,19,other,    model.add(BatchNormalization()) # normalization
+nb_1063377,35.0,20,other,    model.add(Dropout(0.4)) #dropout rate. needs to be tuned
+nb_1063377,35.0,21,other,        
+nb_1063377,35.0,22,other,"    model.add(Dense(20,init=init)) # number of hidden1 units. needs to be tuned."
+nb_1063377,35.0,23,other,    model.add(Activation('sigmoid'))
+nb_1063377,35.0,24,other,    model.add(PReLU())
+nb_1063377,35.0,25,other,    model.add(BatchNormalization())    
+nb_1063377,35.0,26,other,    model.add(Dropout(0.4)) #dropout rate. needs to be tuned
+nb_1063377,35.0,27,other,    
+nb_1063377,35.0,28,other,"#     model.add(Dense(20,init=init)) # number of hidden2 units. needs to be tuned."
+nb_1063377,35.0,29,other,#     model.add(Activation('sigmoid'))
+nb_1063377,35.0,30,other,#     model.add(PReLU())
+nb_1063377,35.0,31,other,#     model.add(BatchNormalization())    
+nb_1063377,35.0,32,other,#     model.add(Dropout(0.4)) #dropout rate. needs to be tuned
+nb_1063377,35.0,33,other,    
+nb_1063377,35.0,34,other,"    model.add(Dense(3,"
+nb_1063377,35.0,35,other,"                   init = init,"
+nb_1063377,35.0,36,other,                   activation = 'softmax')) # 1 for regression 
+nb_1063377,35.0,37,other,"    model.compile(loss = 'categorical_crossentropy',"
+nb_1063377,35.0,38,other,"#                   metrics=[mae_log],"
+nb_1063377,35.0,39,other,                  optimizer = 'Adamax' # optimizer. you may want to try different ones
+nb_1063377,35.0,40,other,                 )
+nb_1063377,35.0,41,other,    return(model)
+nb_1063377,35.0,42,other,
+nb_1063377,35.0,43,other,
+nb_1063377,35.0,44,other,
+nb_1063377,35.0,45,print,model = create_model(X_train.shape[1])
+nb_1063377,35.0,46,other,"fit= model.fit_generator(generator=batch_generator(X_train, y_train, 128, True),"
+nb_1063377,35.0,47,other,"                         nb_epoch=1000,"
+nb_1063377,35.0,48,other,"                         samples_per_epoch=ntrain,"
+nb_1063377,35.0,49,other,"                         validation_data=(X_val.todense(), y_val),"
+nb_1063377,35.0,50,other,"                         callbacks=[early_stop,checkpointer]"
+nb_1063377,35.0,51,other,                         )
+nb_1063377,35.0,52,other,
+nb_1063377,35.0,53,stats,print min(fit.history['val_loss'])
+nb_1063377,36.0,1,other,
+nb_1063377,36.0,2,other,
+nb_1063377,36.0,3,other,def nn_model(params):
+nb_1063377,36.0,4,other,    model = Sequential()
+nb_1063377,36.0,5,other,    init = 'glorot_uniform'
+nb_1063377,36.0,6,other,    
+nb_1063377,36.0,7,other,"    model.add(Dense(params['input_size'], # number of input units: needs to be tuned"
+nb_1063377,36.0,8,other,"                    input_dim = params['input_dim'], # fixed length: number of columns of X"
+nb_1063377,36.0,9,other,"                    init=init,"
+nb_1063377,36.0,10,other,                   ))
+nb_1063377,36.0,11,other,    model.add(Activation('sigmoid'))
+nb_1063377,36.0,12,other,    model.add(PReLU()) # activation function
+nb_1063377,36.0,13,other,    model.add(BatchNormalization()) # normalization
+nb_1063377,36.0,14,other,    model.add(Dropout(params['input_drop_out'])) #dropout rate. needs to be tuned
+nb_1063377,36.0,15,other,        
+nb_1063377,36.0,16,other,"    model.add(Dense(params['hidden_size'],"
+nb_1063377,36.0,17,other,                    init=init)) # number of hidden1 units. needs to be tuned.
+nb_1063377,36.0,18,other,    model.add(Activation('sigmoid'))
+nb_1063377,36.0,19,other,    model.add(PReLU())
+nb_1063377,36.0,20,other,    model.add(BatchNormalization())    
+nb_1063377,36.0,21,other,    model.add(Dropout(params['hidden_drop_out'])) #dropout rate. needs to be tuned
+nb_1063377,36.0,22,other,    
+nb_1063377,36.0,23,other,"#     model.add(Dense(20,init=init)) # number of hidden2 units. needs to be tuned."
+nb_1063377,36.0,24,other,#     model.add(Activation('sigmoid'))
+nb_1063377,36.0,25,other,#     model.add(PReLU())
+nb_1063377,36.0,26,other,#     model.add(BatchNormalization())    
+nb_1063377,36.0,27,other,#     model.add(Dropout(0.5)) #dropout rate. needs to be tuned
+nb_1063377,36.0,28,other,    
+nb_1063377,36.0,29,other,"    model.add(Dense(3,"
+nb_1063377,36.0,30,other,"                    init = init,"
+nb_1063377,36.0,31,other,                    activation = 'softmax')) # 1 for regression 
+nb_1063377,36.0,32,other,"    model.compile(loss = 'categorical_crossentropy',"
+nb_1063377,36.0,33,other,                  optimizer = 'Adamax' # optimizer. you may want to try different ones
+nb_1063377,36.0,34,other,                 )
+nb_1063377,36.0,35,other,    return(model)
+nb_1063377,36.0,36,other,
+nb_1063377,36.0,37,other,
+nb_1063377,36.0,38,other,
+nb_1063377,36.0,39,other,"def nn_blend_data(parameters, train_x, train_y, test_x, fold, early_stopping_rounds=10, batch_size=128,randomseed = 1234):"
+nb_1063377,36.0,40,other,    
+nb_1063377,36.0,41,other,    
+nb_1063377,36.0,42,other,"    early_stop = EarlyStopping(monitor='val_loss', # custom metric"
+nb_1063377,36.0,43,other,"                           patience=early_stopping_rounds, #early stopping for epoch"
+nb_1063377,36.0,44,other,                           verbose=0)
+nb_1063377,36.0,45,other,"    checkpointer = ModelCheckpoint(filepath=""weights.hdf5"", "
+nb_1063377,36.0,46,other,"                               monitor='val_loss', "
+nb_1063377,36.0,47,other,"                               verbose=0, save_best_only=True)"
+nb_1063377,36.0,48,other,
+nb_1063377,36.0,49,other,
+nb_1063377,36.0,50,other,    N_params = len(parameters)
+nb_1063377,36.0,51,other,"#     print (""Blend %d estimators for %d folds"" % (len(parameters), fold))"
+nb_1063377,36.0,52,other,"    skf = KFold(n_splits=fold, shuffle=True, random_state=randomseed)"
+nb_1063377,36.0,53,print,    N_class = train_y.shape[1]
+nb_1063377,36.0,54,other,    
+nb_1063377,36.0,55,print,"    train_blend_x = np.zeros((train_x.shape[0], N_class*N_params))"
+nb_1063377,36.0,56,print,"    test_blend_x = np.zeros((test_x.shape[0], N_class*N_params))"
+nb_1063377,36.0,57,other,"    scores = np.zeros ((fold,N_params))"
+nb_1063377,36.0,58,other,"    best_rounds = np.zeros ((fold, N_params))"
+nb_1063377,36.0,59,other,    fold_start = time.time() 
+nb_1063377,36.0,60,other,
+nb_1063377,36.0,61,other,    
+nb_1063377,36.0,62,other,"    for j, nn_params in enumerate(parameters):"
+nb_1063377,36.0,63,other,"#         print (""Model %d: %s"" %(j+1, nn_params))"
+nb_1063377,36.0,64,print,"        test_blend_x_j = np.zeros((test_x.shape[0], N_class*fold))"
+nb_1063377,36.0,65,other,        
+nb_1063377,36.0,66,other,"        for i, (train_index, val_index) in enumerate(skf.split(train_x)):"
+nb_1063377,36.0,67,other,"#             print (""Model %d fold %d"" %(j+1,i+1))"
+nb_1063377,36.0,68,other,            train_x_fold = train_x[train_index]
+nb_1063377,36.0,69,other,            train_y_fold = train_y[train_index]
+nb_1063377,36.0,70,other,            val_x_fold = train_x[val_index]
+nb_1063377,36.0,71,other,            val_y_fold = train_y[val_index]
+nb_1063377,36.0,72,other,            
+nb_1063377,36.0,73,other,
+nb_1063377,36.0,74,other,            model = nn_model(nn_params)
+nb_1063377,36.0,75,other,#             print (model)
+nb_1063377,36.0,76,other,"            fit= model.fit_generator(generator=batch_generator(train_x_fold, train_y_fold, batch_size, True),"
+nb_1063377,36.0,77,other,"                                     nb_epoch=70,"
+nb_1063377,36.0,78,print,"                                     samples_per_epoch=train_x_fold.shape[0],"
+nb_1063377,36.0,79,other,"                                     validation_data=(val_x_fold.todense(), val_y_fold),"
+nb_1063377,36.0,80,other,"                                     verbose = 0,"
+nb_1063377,36.0,81,other,"                                     callbacks=[early_stop, checkpointer]"
+nb_1063377,36.0,82,other,                                    )
+nb_1063377,36.0,83,other,
+nb_1063377,36.0,84,other,            best_round=len(fit.epoch)-early_stopping_rounds-1
+nb_1063377,36.0,85,other,"            best_rounds[i,j]=best_round"
+nb_1063377,36.0,86,other,"#             print (""best round %d"" % (best_round))"
+nb_1063377,36.0,87,other,            
+nb_1063377,36.0,88,other,"            model.load_weights(""weights.hdf5"")"
+nb_1063377,36.0,89,other,            # Compile model (required to make predictions)
+nb_1063377,36.0,90,other,"            model.compile(loss = 'categorical_crossentropy',optimizer = 'Adamax' )"
+nb_1063377,36.0,91,other,            
+nb_1063377,36.0,92,other,"            # print (mean_absolute_error(np.exp(y_val)-200, pred_y))"
+nb_1063377,36.0,93,other,"            val_y_predict_fold = model.predict_proba(x=val_x_fold.toarray(),verbose=0)"
+nb_1063377,36.0,94,other,"            score = log_loss(val_y_fold, val_y_predict_fold)"
+nb_1063377,36.0,95,other,"#             print (""Score: "", score)"
+nb_1063377,36.0,96,other,"            scores[i,j]=score   "
+nb_1063377,36.0,97,other,"            train_blend_x[val_index, (j*N_class):(j+1)*N_class] = val_y_predict_fold"
+nb_1063377,36.0,98,other,            
+nb_1063377,36.0,99,other,"            model.load_weights(""weights.hdf5"")"
+nb_1063377,36.0,100,other,            # Compile model (required to make predictions)
+nb_1063377,36.0,101,other,"            model.compile(loss = 'categorical_crossentropy',optimizer = 'Adamax' )            "
+nb_1063377,36.0,102,other,"            test_blend_x_j[:,(i*N_class):(i+1)*N_class] = model.predict_proba(x=test_x.toarray(),verbose=0)"
+nb_1063377,36.0,103,other,"#             print (""Model %d fold %d fitting finished in %0.3fs"" % (j+1,i+1, time.time() - fold_start))            "
+nb_1063377,36.0,104,other,            
+nb_1063377,36.0,105,other,"        test_blend_x[:,(j*N_class):(j+1)*N_class] = \"
+nb_1063377,36.0,106,stats,"                np.stack([test_blend_x_j[:,range(0,N_class*fold,N_class)].mean(1),"
+nb_1063377,36.0,107,stats,"                          test_blend_x_j[:,range(1,N_class*fold,N_class)].mean(1),"
+nb_1063377,36.0,108,stats,"                          test_blend_x_j[:,range(2,N_class*fold,N_class)].mean(1)]).T"
+nb_1063377,36.0,109,other,            
+nb_1063377,36.0,110,stats,"#         print (""Score for model %d is %f"" % (j+1,np.mean(scores[:,j])))"
+nb_1063377,36.0,111,stats,"    print ""Score for blended models is %f in %0.3fm"" % (np.mean(scores), (time.time() - fold_start)/60)"
+nb_1063377,36.0,112,other,"    return (train_blend_x, test_blend_x, scores,best_rounds)"
+nb_1063377,37.0,1,print,"train_total = np.zeros((train_df_nn.shape[0],3))"
+nb_1063377,37.0,2,print,"test_total = np.zeros((test_df_nn.shape[0],3))"
+nb_1063377,37.0,3,other,score_total = 0
+nb_1063377,37.0,4,other,name_train_blend = '../tmp/train_3rd.csv'
+nb_1063377,37.0,5,other,name_test_blend = '../tmp/test_3rd.csv'
+nb_1063377,37.0,6,other,count = 100
+nb_1063377,37.0,7,other,print 'Starting.........'
+nb_1063377,37.0,8,other,for n in range(count):
+nb_1063377,37.0,9,other,    print n
+nb_1063377,37.0,10,other,    nn_parameters = [
+nb_1063377,37.0,11,other,"        { 'input_size' :70 ,"
+nb_1063377,37.0,12,print,"         'input_dim' : train_X.shape[1],"
+nb_1063377,37.0,13,other,"         'input_drop_out' : 0.4 ,"
+nb_1063377,37.0,14,other,"         'hidden_size' : 20 ,"
+nb_1063377,37.0,15,other,"         'hidden_drop_out' :0.4},"
+nb_1063377,37.0,16,other,
+nb_1063377,37.0,17,other,    ]
+nb_1063377,37.0,18,other,
+nb_1063377,37.0,19,other,"    (train_blend_x, test_blend_x, blend_scores,best_round) = nn_blend_data(nn_parameters, train_df_nn, train_y, test_df_nn,"
+nb_1063377,37.0,20,other,"                                                             5,"
+nb_1063377,37.0,21,other,"                                                             10,128,n+500)"
+nb_1063377,37.0,22,other,    train_total += train_blend_x
+nb_1063377,37.0,23,other,    test_total += test_blend_x
+nb_1063377,37.0,24,stats,    score_total += np.mean(blend_scores)
+nb_1063377,37.0,25,other,
+nb_1063377,37.0,26,other,
+nb_1063377,37.0,27,other,"    np.savetxt(name_train_blend,train_total, delimiter="","")"
+nb_1063377,37.0,28,other,"    np.savetxt(name_test_blend,test_total, delimiter="","")"
+nb_1063377,37.0,29,other,    
+nb_1063377,37.0,30,other,train_total = train_total / count
+nb_1063377,37.0,31,other,test_total = test_total / count
+nb_1063377,37.0,32,other,score_total = score_total / count
+nb_1063377,38.0,1,other,test_total
+nb_1063377,39.0,1,other,now = datetime.now()
+nb_1063377,39.0,2,other,"sub_name = '../output/sub_3rdKeras_last_100bagging_' + str(now.strftime(""%Y-%m-%d-%H-%M"")) + '.csv'"
+nb_1063377,39.0,3,other,
+nb_1063377,39.0,4,create,out_df = pd.DataFrame(test_total)
+nb_1063377,39.0,5,print,"out_df.columns = [""low"", ""medium"", ""high""]"
+nb_1063377,39.0,6,other,"out_df[""listing_id""] = sub_id"
+nb_1063377,39.0,7,other,"out_df.to_csv(sub_name, index=False)"
+nb_1063377,40.0,1,other,
+nb_1063377,40.0,2,other,# now = datetime.now()
+nb_1063377,40.0,3,other,
+nb_1063377,40.0,4,other,"name_train_blend = '../output/train_blend_3rdKeras_100bagging_' + str(now.strftime(""%Y-%m-%d-%H-%M"")) + '.csv'"
+nb_1063377,40.0,5,other,"name_test_blend = '../output/test_blend_3rdKeras_100bagging_' + str(now.strftime(""%Y-%m-%d-%H-%M"")) + '.csv'"
+nb_1063377,40.0,6,other,
+nb_1063377,40.0,7,other,
+nb_1063377,40.0,8,other,
+nb_1063377,40.0,9,stats,"print (np.mean(blend_scores,axis=0))"
+nb_1063377,40.0,10,stats,"print (np.mean(best_round,axis=0))"
+nb_1063377,40.0,11,other,"np.savetxt(name_train_blend,train_total, delimiter="","")"
+nb_1063377,40.0,12,other,"np.savetxt(name_test_blend,test_total, delimiter="","")"
